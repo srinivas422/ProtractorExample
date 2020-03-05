@@ -9,7 +9,6 @@ Herein lies an example [Protractor](http://protractortest.org) project, that inc
 * Runs multiple browsers at once
 * Runs tests sharded (parallel)
 * Includes examples tests for both Angular, and non-Angular applications
-* Uses [protractor-flake](https://github.com/NickTomlin/protractor-flake) to re-run failed tests
 * is written using es6
 
 ## Setup:
