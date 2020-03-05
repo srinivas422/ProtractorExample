@@ -15,11 +15,12 @@ class PoliHomePage extends BasePage {
         this.payButton = element(by.id('PayWithPOLi1'));   
         this.bankDropDown = element(by.id('bankdropdown')); 
         this.selectBank = element(by.cssContainingText('option', 'iBank AU 01'));
-        this.userNameTxtField = element(by.css('Username')); 
-        this.passwordTxtField = element(by.css('Password')); 
-        this.loginBtn = element(by.css('Login')); 
-        this.spinner = element(by.css('.spinner'));
+        this.userNameTxtField = element(by.xpath("//input[@name='Username']")); 
+        this.passwordTxtField = element(by.xpath("//input[@name='Password']")); 
+        this.loginBtn = element(by.css('button stp-button primary-button')); 
+        this.spinner = element(by.id('processingLabel'));
         this.continueBtn = element(by.id('proceed-button'));
+        this.continueNextBtn = element(by.cssContainingText('type','Continue'));
         this.postTitleLinks = $$('h2 a');
         this.siteTitle = $('h1 a');
         // sidebar...
@@ -31,10 +32,7 @@ class PoliHomePage extends BasePage {
 
         this.url = 'https://demo.tst1.paywithpoli.com/PriceBuster/TestCheckout.aspx';
         // pageLoaded is used by `.loaded()` to test that we're on a page
-        this.pageLoaded = this.and(
-            this.hasText(this.siteTitle, 'Quality Shepherd'),
-            this.isClickable(this.postTitleLinks.first())
-        );
+        this.pageLoaded = this.hasText(this.merchantCodeTextField, 'PriceBusterDVD_AU');
     }
 
      /**
@@ -66,6 +64,10 @@ class PoliHomePage extends BasePage {
         return this.payButton.click();
     }
 
+     /**
+     * check if a post title exists
+     * @return {promise}
+     */
     async selectBankFromDropDown() {
         await this.bankDropDown.click();
         var EC = protractor.ExpectedConditions;
@@ -74,23 +76,38 @@ class PoliHomePage extends BasePage {
         return this.continueBtn.click();
     }
 
-    
-    async enterUserNameandPwd() {
-        browser.wait(function() {
-            // return a boolean here. Wait for spinner to be gone.
-            return browser.isElementPresent(this.spinner);
-          },200000);  
-        var EC = protractor.ExpectedConditions;
-        browser.wait(EC.visibilityOf(this.userNameTxtField), 50000);
-        await this.userNameTxtField.sendKeys("DemoShopper");
-
-       // await this.userNameTxtField.sendKeys("DemoShopper");
-        await this.passwordTxtField.sendKeys("DemoShopper");
-        return this.loginBtn.click();
+     /**
+     * check if a post title exists
+     * @return {promise}
+     */
+    async handleSpinner() {
+        browser.ignoreSynchronization = true;
+        browser.manage().timeouts().implicitlyWait(25000);
+        var until = protractor.ExpectedConditions;
+        browser.wait(until.presenceOf(this.spinner), 1000000, 'Element taking too long to appear in the DOM');
+        return await this.spinner.isPresent();
     }
 
-
-    
+     /**
+     * check if a post title exists
+     * @param  {string} text
+     * @return {promise}
+     */
+    async enterUserNameandPwd() {
+        browser.manage().timeouts().implicitlyWait(25000);
+        browser.ignoreSynchronization = true;
+        var until = protractor.ExpectedConditions;
+        browser.wait(until.presenceOf(this.userNameTxtField), 100000, 'Element taking too long to appear in the DOM');
+        await this.userNameTxtField.sendKeys("DemoShopper");
+        await this.passwordTxtField.sendKeys("DemoShopper");
+        browser.manage().timeouts().implicitlyWait(25000);
+        await BasePage.hitEnter();
+        browser.ignoreSynchronization = true;
+        browser.manage().timeouts().implicitlyWait(100000);
+        browser.wait(until.presenceOf(this.continueNextBtn), 100000, 'Element taking too long to appear in the DOM');
+        return this.continueNextBtn.click();
+    }
+ 
     /**
      * check if a post title exists
      * @param  {string} postTitle

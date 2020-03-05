@@ -25,10 +25,10 @@ exports.config = {
 
     // Setup the report before any tests start
        
-    onPrepare: function() {
-        onPrepare: async () => {
-            await browser.waitForAngularEnabled(false);
-        }  
+    onPrepare: async () => {
+        browser.manage().timeouts().pageLoadTimeout(40000);
+        browser.manage().timeouts().implicitlyWait(25000);
+        await browser.waitForAngularEnabled(false);
         jasmine.getEnv().addReporter(new Jasmine2HtmlReporter({
         savePath: './test/reports/',
         fileName: 'testresultsreport',

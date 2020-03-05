@@ -1,3 +1,5 @@
+import qsHomePage from '../pages/poliHomePage';
+import poliHomePage from '../pages/poliHomePage';
 
 export default class BasePage {
     constructor() {
@@ -32,8 +34,8 @@ export default class BasePage {
      */
     async loaded() {
         return browser.wait(async () => {
-            return await this.pageLoaded();
-        }, this.timeout.xl, 'timeout: waiting for page to load. The url is: ' + this.url);
+            return await poliHomePage.pageLoaded();
+        }, this.timeout.xxl, 'timeout: waiting for page to load. The url is: ' + this.url);
     }
 
     /**
@@ -42,9 +44,9 @@ export default class BasePage {
      * @requires page have both `url` and `pageLoaded` properties
      */
     async goto() {
-        await browser.get(this.url, this.timeout.xl);
+        await browser.get(this.url, this.timeout.xxl);
         browser.driver.manage().window().maximize();
-        return await this.loaded();
+       // return await this.loaded();
     }
 
     /**

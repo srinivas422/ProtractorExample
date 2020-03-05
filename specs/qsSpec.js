@@ -6,6 +6,8 @@ import githubPage from '../pages/githubPage';
 
 describe('Poli Ineternet Banking', () =>  {
 	beforeEach(async () =>  {
+		browser.ignoreSynchronization = true;
+		browser.manage().timeouts().implicitlyWait(25000);
 		await qsHomePage.goto();
 	});
 
@@ -14,6 +16,7 @@ describe('Poli Ineternet Banking', () =>  {
 		await qsHomePage.enterAmount("10.03");
 		await qsHomePage.clickPayButon();
 		await qsHomePage.selectBankFromDropDown();
+		await qsHomePage.handleSpinner();
 		return qsHomePage.enterUserNameandPwd();
 	});
 	
